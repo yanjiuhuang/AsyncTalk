@@ -1,0 +1,46 @@
+Tech Note 
+
+1. Epoll in Linux
+
+int epoll_create(int size): create the file descriptor for epoll instance and return it.
+
+int epoll_create1(int flag): create the file desciptor with specified file flags. 
+
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event* event): do some operations(op) for the target file descriptor(fd). The valid op operation value:
+	EPOLL_CTL_ADD: register the event to specified epoll epfd for target fd. 
+	EPOLL_CTL_MOD:
+	EPOLL_CTL_DEL:
+
+			typedef union epoll_data {
+               void        *ptr;
+               int          fd;
+               uint32_t     u32;
+               uint64_t     u64;
+           	} epoll_data_t;
+
+           	struct epoll_event {
+               uint32_t     events;      /* Epoll events */
+               epoll_data_t data;        /* User data variable */
+           	};
+
+The event member of epoll_event specifies a set of event type.
+#. EPOLLIN
+#. EPOLLOUT
+#. EPOLLRDHUP: stream socket peer closed connection or shutdown writing half of connection. 
+#. EPOLLPRI: There is urgent data available for read() operation
+
+2. getaddrinfo(const char* host, 
+			   const char* service, 
+			   const struct addrinfo* hint, 
+			   struct addrinfo** res)
+This function combine the "gethostbyname()" and "getservbyname()" two functions to provide one universal interface. The addrinfo struct consist of following items:
+struct addrinfo{
+	int 	ai_flags,
+	int 	ai_family,
+	int 	ai_socktype,
+	int 	ai_protocol,
+	int 	ai_socklen,
+	struct sockaddr* 	ai_addr,
+	char* 	ai_canonname,
+	struct addrinfo* next
+}
